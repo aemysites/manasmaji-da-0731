@@ -44,7 +44,30 @@
           "url": "https://www.wknd-trendsetters.site/fashion-trends-of-the-season",
           "urlHash": "1cfeb2756419a8f56a89a355f5557c3321845adb",
           "uuid": "1cfeb275-00-6e70765a003047818ea5700b557b8d01b43078df",
-          "xpath": "/html[1]/body[1]/div[1]"
+          "xpath": "/html[1]/body[1]/div[1]",
+          "differences": [
+            {
+              "element_id": "html__body__div",
+              "differences": [
+                {
+                  "change_type": "deletion",
+                  "text": "Trends Casual Streetwear Everyday looks, always fresh. Sporty Move easy, look sharp. Party Turn heads after dark. Now Trending Tennis Serve up cool style. Beach Chill fits, sun vibes. Festival Dance, play, repeat. Inspo Style Files Real looks, real people. Blog Watch Fresh brands, hot takes. How To Trend tips, made easy. Fresh fits, bold moves See how trendsetters own every moment. Discover About Blog Support Contact FAQ Subscribe"
+                }
+              ],
+              "dissimilarity_score": 1.0
+            },
+            {
+              "element_id": "html__body__div",
+              "differences": [
+                {
+                  "change_type": "deletion",
+                  "text": "Trends Casual Streetwear Everyday looks, always fresh. Sporty Move easy, look sharp. Party Turn heads after dark. Now Trending Tennis Serve up cool style. Beach Chill fits, sun vibes. Festival Dance, play, repeat. Inspo Style Files Real looks, real people. Blog Watch Fresh brands, hot takes. How To Trend tips, made easy. Fresh fits, bold moves See how trendsetters own every moment. Discover About Blog Support Contact FAQ Subscribe"
+                }
+              ],
+              "dissimilarity_score": 1.0
+            }
+          ],
+          "similarity_score": 0.0
         },
         {
           "url": "https://www.wknd-trendsetters.site/faq",
@@ -259,7 +282,30 @@
           "url": "https://www.wknd-trendsetters.site/fashion-trends-of-the-season",
           "urlHash": "1cfeb2756419a8f56a89a355f5557c3321845adb",
           "uuid": "1cfeb275-08-a507e040135207256fc0c4fd07f12510b5a9e729",
-          "xpath": "/html[1]/body[1]/footer[1]"
+          "xpath": "/html[1]/body[1]/footer[1]",
+          "differences": [
+            {
+              "element_id": "html__body__footer",
+              "differences": [
+                {
+                  "change_type": "equal",
+                  "text": "Fashion Blog Facebook Instagram X LinkedIn YouTube Trends Style Looks Events Brands Tips Inspire Stories People Culture Vibes Fun Explore Travel Beach Night Sport Chill"
+                }
+              ],
+              "dissimilarity_score": -0.0
+            },
+            {
+              "element_id": "html__body__footer",
+              "differences": [
+                {
+                  "change_type": "deletion",
+                  "text": "Fashion Blog Facebook Instagram X LinkedIn YouTube Trends Style Looks Events Brands Tips Inspire Stories People Culture Vibes Fun Explore Travel Beach Night Sport Chill"
+                }
+              ],
+              "dissimilarity_score": 1.0
+            }
+          ],
+          "similarity_score": 0.5
         },
         {
           "url": "https://www.wknd-trendsetters.site/faq",
@@ -658,7 +704,30 @@
           "urlHash": "1cfeb2756419a8f56a89a355f5557c3321845adb",
           "uuid": "1cfeb275-00-6e70765a003047818ea5700b557b8d01b43078df",
           "xpath": "/html[1]/body[1]/div[1]",
-          "section": "section-1"
+          "section": "section-1",
+          "differences": [
+            {
+              "element_id": "html__body__div",
+              "differences": [
+                {
+                  "change_type": "deletion",
+                  "text": "Trends Casual Streetwear Everyday looks, always fresh. Sporty Move easy, look sharp. Party Turn heads after dark. Now Trending Tennis Serve up cool style. Beach Chill fits, sun vibes. Festival Dance, play, repeat. Inspo Style Files Real looks, real people. Blog Watch Fresh brands, hot takes. How To Trend tips, made easy. Fresh fits, bold moves See how trendsetters own every moment. Discover About Blog Support Contact FAQ Subscribe"
+                }
+              ],
+              "dissimilarity_score": 1.0
+            },
+            {
+              "element_id": "html__body__div",
+              "differences": [
+                {
+                  "change_type": "deletion",
+                  "text": "Trends Casual Streetwear Everyday looks, always fresh. Sporty Move easy, look sharp. Party Turn heads after dark. Now Trending Tennis Serve up cool style. Beach Chill fits, sun vibes. Festival Dance, play, repeat. Inspo Style Files Real looks, real people. Blog Watch Fresh brands, hot takes. How To Trend tips, made easy. Fresh fits, bold moves See how trendsetters own every moment. Discover About Blog Support Contact FAQ Subscribe"
+                }
+              ],
+              "dissimilarity_score": 1.0
+            }
+          ],
+          "similarity_score": 0.0
         },
         {
           "url": "https://www.wknd-trendsetters.site/faq",
@@ -882,7 +951,30 @@
           "urlHash": "1cfeb2756419a8f56a89a355f5557c3321845adb",
           "uuid": "1cfeb275-08-a507e040135207256fc0c4fd07f12510b5a9e729",
           "xpath": "/html[1]/body[1]/footer[1]",
-          "section": "section-2"
+          "section": "section-2",
+          "differences": [
+            {
+              "element_id": "html__body__footer",
+              "differences": [
+                {
+                  "change_type": "equal",
+                  "text": "Fashion Blog Facebook Instagram X LinkedIn YouTube Trends Style Looks Events Brands Tips Inspire Stories People Culture Vibes Fun Explore Travel Beach Night Sport Chill"
+                }
+              ],
+              "dissimilarity_score": -0.0
+            },
+            {
+              "element_id": "html__body__footer",
+              "differences": [
+                {
+                  "change_type": "deletion",
+                  "text": "Fashion Blog Facebook Instagram X LinkedIn YouTube Trends Style Looks Events Brands Tips Inspire Stories People Culture Vibes Fun Explore Travel Beach Night Sport Chill"
+                }
+              ],
+              "dissimilarity_score": 1.0
+            }
+          ],
+          "similarity_score": 0.5
         },
         {
           "url": "https://www.wknd-trendsetters.site/faq",
@@ -1333,7 +1425,20 @@
           "urlHash": "1cfeb2756419a8f56a89a355f5557c3321845adb",
           "uuid": "1cfeb275-01-b2c8ec8cc7206114599cd049698cc67e0e048d63",
           "xpath": "/html[1]/body[1]/header[1]",
-          "section": "section-2"
+          "section": "section-2",
+          "differences": [
+            {
+              "element_id": "html__body__header",
+              "differences": [
+                {
+                  "change_type": "equal",
+                  "text": "Fresh fits, bold moves Trends for every vibe. From tennis whites to neon nights, we\u2019re serving up the coolest outfits and the real stories behind them. Get inspired, get noticed, and make every day a runway. Read more See trends"
+                }
+              ],
+              "dissimilarity_score": -0.0
+            }
+          ],
+          "similarity_score": 0.0
         }
       ]
     },
@@ -2118,14 +2223,14 @@
   ],
   "pages": [
     {
-      "url": "https://www.wknd-trendsetters.site/fashion-insights",
+      "url": "https://www.wknd-trendsetters.site/fashion-trends-of-the-season",
       "differences": [
         {
           "change_type": "equal",
-          "text": "Trends Casual Streetwear Everyday looks, always fresh. Sporty Move easy, look sharp. Party Turn heads after dark. Now Trending Tennis Serve up cool style. Beach Chill fits, sun vibes. Festival Dance, play, repeat. Inspo Style Files Real looks, real people. Blog Watch Fresh brands, hot takes. How To Trend tips, made easy. Fresh fits, bold moves See how trendsetters own every moment. Discover About Blog Support Contact FAQ Subscribe WKND Trendsetters Blog Fresh looks, bold moves Latest Articles Casual Cool May 12 Tennis style, redefined Beach Vibes May 10 Sunkissed and effortless Night Out May 8 Party fits that pop Sport Mode May 5 Game on, style up Style in every snapshot Fresh looks, bold vibes, endless inspo Fresh fits, bold moves, all day From tennis courts to neon nights, discover the latest trends, style inspo, and stories from the coolest scenes. Dive into a world where fashion meets fun\u2014your next look starts here. Read more Fashion Blog Facebook Instagram X LinkedIn YouTube Trends Style Looks Events Brands Tips Inspire Stories People Culture Vibes Fun Explore Travel Beach Night Sport Chill"
+          "text": "Trends Casual Streetwear Everyday looks, always fresh. Sporty Move easy, look sharp. Party Turn heads after dark. Now Trending Tennis Serve up cool style. Beach Chill fits, sun vibes. Festival Dance, play, repeat. Inspo Style Files Real looks, real people. Blog Watch Fresh brands, hot takes. How To Trend tips, made easy. Fresh fits, bold moves See how trendsetters own every moment. Discover About Blog Support Contact FAQ Subscribe Fresh fits, bold moves Trends for every vibe. From tennis whites to neon nights, we\u2019re serving up the coolest outfits and the real stories behind them. Get inspired, get noticed, and make every day a runway. Read more See trends Trend alert Fresh fits, bold moves Dive into the latest street style, sporty looks, and party-ready outfits. Discover how young trendsetters are rocking new brands while living their best lives\u2014on the court, at the beach, or out all night. Read more Style in every snapshot Trendy looks, real moments Style in every snapshot Fresh looks, bold vibes, endless inspo Trends that turn heads Fresh looks, bold moves, endless inspo. Join now Fashion Blog Facebook Instagram X LinkedIn YouTube Trends Style Looks Events Brands Tips Inspire Stories People Culture Vibes Fun Explore Travel Beach Night Sport Chill"
         }
       ],
-      "similarity_score": 1.0
+      "similarity_score": 0.9999999999999939
     }
   ]
 }
