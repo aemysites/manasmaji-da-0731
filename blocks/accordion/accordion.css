@@ -1,8 +1,14 @@
+/* Stylelint-disable no-descending-specificity */
+
+.accordion {
+  background: #F7F7F2;
+  font-family: var(--body-font-family);
+}
+
 .accordion details {
   border: 1px solid #dadada;
 }
 
-/* stylelint-disable-next-line no-descending-specificity */
 .accordion details + details {
   margin-top: 24px;
 }
@@ -51,11 +57,104 @@
   transform: translateY(-50%) rotate(-45deg);
 }
 
-.accordion details .accordion-item-body {
-  padding: 0 16px;
+/* Accordion items: only bottom border as separator */
+.accordion .accordion-item {
+  border: none;
+  border-bottom: 1px solid #E0E0DD;
+  margin: 0;
+  background: #F7F7F2;
+  padding: 0;
 }
 
+.accordion .accordion-item:last-child {
+  border-bottom: none;
+}
+
+/* Flex row: perfectly vertically centered label + chevron */
+.accordion .accordion-item-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  padding-left: 24px;
+  padding-right: 16px;
+  cursor: pointer;
+  background: #F7F7F2;
+  font-family: var(--body-font-family);
+  font-size: 15px;
+  font-weight: 500;
+  color: #3D3D3D;
+  line-height: normal;
+  position: relative;
+  user-select: none;
+  transition: background 0.2s;
+  outline: none;
+  border: none;
+  box-sizing: border-box;
+}
+
+/* Remove default summary marker for all browsers */
+.accordion .accordion-item-label::-webkit-details-marker,
+.accordion .accordion-item-label::marker {
+  display: none;
+}
+
+/* P tag styling for proper vertical alignment */
+.accordion .accordion-item-label p {
+  font-size: 15px;
+  color: #3D3D3D;
+  font-family: var(--body-font-family);
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.2;
+  flex: 1 1 auto;
+  padding: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Chevron: subtle, centered, visually balanced */
+.accordion .accordion-item-label::after {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-left: 8px;
+  border: solid #A0A0A0;
+  border-width: 0 1.2px 1.2px 0;
+  border-radius: 0.5px;
+  transform: rotate(45deg) translateY(1px); /* Nudge down for perfect vertical alignment */
+  transition: transform 0.18s;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Rotate chevron up when open */
+.accordion .accordion-item[open] > .accordion-item-label::after {
+  transform: rotate(-135deg) translateY(1px);
+}
+
+/* Accordion body: standard padding and font */
+.accordion .accordion-item-body {
+  padding: 0 24px;
+  background: #F7F7F2;
+  font-size: 15px;
+  color: #3D3D3D;
+  font-family: var(--body-font-family);
+  line-height: 1.5;
+}
+
+/* Subtle border above expanded content, if visible when open */
+.accordion .accordion-item[open] .accordion-item-body {
+  border-top: 1px solid #E0E0DD;
+  background: #F7F7F2;
+}
+
+/* Combine selectors to resolve descending-specificity issues */
+.accordion details .accordion-item-body,
 .accordion details[open] .accordion-item-body {
+  padding: 0 16px;
   border-top: 1px solid #dadada;
   background-color: var(--background-color);
 }
