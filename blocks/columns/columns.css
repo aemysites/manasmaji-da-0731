@@ -1,4 +1,4 @@
-/* Disable no-descending-specificity rule globally */
+/* Disable the no-descending-specificity rule for this file */
 /* stylelint-disable no-descending-specificity */
 
 .columns {
@@ -13,8 +13,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 56px; /* Slightly reduced gap for a closer match to the original */
-  max-width: 680px; /* Tighter constraint for central alignment */
+  gap: 56px;
+  max-width: 680px;
   margin: 0 auto;
   width: 100%;
   min-height: 400px;
@@ -31,7 +31,7 @@
   background: transparent;
   padding: 0;
   box-sizing: border-box;
-  order: 1; /* Consolidated from earlier individual rule */
+  order: 1;
 }
 
 .columns > div > .columns-img-col {
@@ -46,7 +46,7 @@
 .columns img {
   display: block;
   width: 100%;
-  max-width: 300px; /* Slight reduction for more breathing room */
+  max-width: 300px;
   height: auto;
   object-fit: cover;
   margin: 0 auto;
@@ -54,7 +54,6 @@
   box-shadow: none;
 }
 
-/* Responsiveness */
 @media (width <= 850px) {
   .columns > div {
     gap: 6vw;
@@ -103,5 +102,70 @@
   .columns > div > div {
     flex: 1;
     order: unset;
+  }
+}
+
+.columns.columns29 {
+  padding: 0;
+  background: transparent;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Remove horizontal constraints and allow the block to fill the available width */
+.columns.columns29 > div > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  width: 100vw;
+  max-width: 100vw;
+  margin: 48px 0;
+  box-sizing: border-box;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Make image columns fully expand */
+.columns.columns29 .columns-img-col {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  border-radius: 24px;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+/* Ensure images fill their containers and keep rounded corners */
+.columns.columns29 .columns-img-col picture,
+.columns.columns29 .columns-img-col img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 24px;
+  display: block;
+  max-width: unset;
+}
+
+/* Responsive: stack columns on smaller screens */
+@media (width <= 900px) {
+  .columns.columns29 > div > div {
+    flex-direction: column;
+    gap: 24px;
+    width: 100vw;
+    max-width: 650px;
+    margin: 24px auto;
+    height: auto;
+  }
+
+  .columns.columns29 .columns-img-col {
+    aspect-ratio: 3 / 2;
+    width: 100%;
+    height: auto;
+    min-width: 0;
   }
 }
