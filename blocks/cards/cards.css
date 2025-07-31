@@ -703,8 +703,6 @@
   max-width: 1200px;
   margin: 0 auto;
 }
-
-/* Main two-column layout */
 .cards.cards37 > ul {
   display: flex;
   flex-direction: row;
@@ -715,8 +713,6 @@
   padding: 0;
   margin: 0;
 }
-
-/* Left column (hero) */
 .cards.cards37 > ul > li:first-child {
   flex: 1 1 52%;
   max-width: 54%;
@@ -776,8 +772,6 @@
 .cards.cards37 > ul > li:first-child p:last-child:hover {
   background: #f3f8f4;
 }
-
-/* --- Right column grid: each card visually unified --- */
 .cards.cards37 > ul > li:nth-child(2) {
   flex: 1 1 46%;
   max-width: 46%;
@@ -789,8 +783,6 @@
   align-items: stretch;
   height: auto;
 }
-
-/* --- Custom card wrappers to group image and text for first card --- */
 .cards.cards37 > ul > li:nth-child(2) {
   position: relative;
 }
@@ -799,8 +791,6 @@
   grid-column: 1 / 2;
   grid-row: 1 / 2;
 }
-
-/* Create a flex card for the first grid cell using a pseudo wrapper */
 .cards.cards37 > ul > li:nth-child(2) .cards-card-image {
   display: flex;
   flex-direction: column;
@@ -824,8 +814,6 @@
   margin: 0;
   display: block;
 }
-
-/* Place the first p as a flex item below the image in the same cell */
 .cards.cards37 > ul > li:nth-child(2) .cards-card-body > p:nth-child(1) {
   position: static;
   background: transparent;
@@ -842,8 +830,6 @@
   flex: 1 1 auto;
   z-index: 2;
 }
-
-/* Make the first card's image and text appear as a single card by overlapping grid items and stacking them with pointer-events and z-index */
 .cards.cards37 > ul > li:nth-child(2) .cards-card-image,
 .cards.cards37 > ul > li:nth-child(2) .cards-card-body > p:nth-child(1) {
   pointer-events: none;
@@ -860,8 +846,6 @@
   font-family: var(--heading-font-family);
   letter-spacing: 0.01em;
 }
-
-/* --- Other text-only cards styled as cards, filling grid cells --- */
 .cards.cards37 > ul > li:nth-child(2) .cards-card-body {
   display: contents;
 }
@@ -901,16 +885,12 @@
   font-family: var(--heading-font-family);
   letter-spacing: 0.01em;
 }
-
-/* Remove default margins for all grid elements */
 .cards.cards37 > ul > li:nth-child(2) .cards-card-image,
 .cards.cards37 > ul > li:nth-child(2) .cards-card-body > p {
   margin: 0;
   min-width: 0;
   min-height: 0;
 }
-
-/* Responsive adjustments: stack columns on smaller screens */
 @media (max-width: 900px) {
   .cards.cards37 > ul {
     flex-direction: column;
@@ -951,5 +931,150 @@
   }
   .cards.cards37 > ul > li:nth-child(2) .cards-card-image img {
     aspect-ratio: 2/1;
+  }
+}
+
+
+.cards.cards33 > ul {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cards.cards33 > ul > li {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 6px 24px 0 rgba(0,0,0,0.07);
+  padding: 28px 36px;
+  min-height: 260px;
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  overflow: visible;
+  transition: box-shadow 0.2s;
+}
+
+/* Ensure both image containers fill the card height and behave identically */
+.cards.cards33 > ul > li > .cards-card-body:first-child,
+.cards.cards33 > ul > li > .cards-card-image {
+  flex: 0 0 42%;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Make the image fill its container fully */
+.cards.cards33 > ul > li > .cards-card-body:first-child img,
+.cards.cards33 > ul > li > .cards-card-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #f5f5f5;
+  margin: 0;
+}
+
+/* Text block fills height for perfect alignment */
+.cards.cards33 > ul > li > .cards-card-body:last-child {
+  flex: 1 1 58%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 28px;
+  padding-right: 0;
+  min-width: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.cards.cards33 > ul > li > .cards-card-body:last-child > p:nth-child(1),
+.cards.cards33 > ul > li > .cards-card-body:last-child > p:nth-child(2) {
+  display: inline-block;
+  background: #f2f2f2;
+  color: #767676;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 14px 3px 14px;
+  margin-right: 8px;
+  margin-bottom: 0;
+  margin-top: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  vertical-align: middle;
+}
+
+/* Add vertical spacing below badge row */
+.cards.cards33 > ul > li > .cards-card-body:last-child > p:nth-child(2) {
+  margin-bottom: 14px;
+}
+
+.cards.cards33 > ul > li > .cards-card-body:last-child > h3 {
+  color: #232323;
+  font-family: 'Montserrat', 'Montserrat Alternates', Arial, sans-serif;
+  font-size: 1.28em;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+.cards.cards33 > ul > li > .cards-card-body:last-child > p:nth-child(4) {
+  color: #767676;
+  font-size: 1em;
+  margin: 0 0 16px 0;
+  line-height: 1.6;
+}
+
+.cards.cards33 > ul > li > .cards-card-body:last-child > p:last-child {
+  color: #767676;
+  font-size: 1em;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 0;
+  margin-bottom: 0;
+  align-self: flex-start;
+}
+
+@media (max-width: 900px) {
+  .cards.cards33 > ul {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .cards.cards33 > ul > li {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 18px 12px;
+    min-height: 0;
+  }
+  .cards.cards33 > ul > li > .cards-card-body:first-child,
+  .cards.cards33 > ul > li > .cards-card-image {
+    flex-basis: unset;
+    width: 100%;
+    height: 180px;
+    margin-bottom: 16px;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+  .cards.cards33 > ul > li > .cards-card-body:last-child {
+    padding-left: 0;
+    padding-top: 0;
+    width: 100%;
+    height: auto;
   }
 }
