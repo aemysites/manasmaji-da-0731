@@ -56,3 +56,193 @@
 .tabs .tabs-panel[aria-hidden='true'] {
   display: none;
 }
+
+
+.tabs {
+  background: #000;
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- Tabs Navigation --- */
+.tabs .tabs-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 56px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #383838;
+  margin-top: 32px;
+  margin-bottom: 22px;
+  padding: 0;
+  width: auto;
+  max-width: 100vw;
+  position: relative;
+  z-index: 1;
+}
+
+/* Remove inherited button/box styles and fix active tab text visibility */
+.tabs .tabs-list button {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 1.15rem;
+  font-family: var(--heading-font-family), 'Montserrat', Arial, sans-serif;
+  font-weight: 500;
+  padding: 0 8px 8px 8px;
+  border-radius: 0;
+  margin: 0;
+  outline: none;
+  box-shadow: none;
+  cursor: pointer;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+  min-width: 68px;
+  text-align: center;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  background-clip: border-box;
+  position: relative;
+  z-index: 2;
+}
+
+.tabs .tabs-list button p {
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  position: relative;
+  z-index: 2;
+}
+
+/* Active tab: white text & thin underline under label only */
+.tabs .tabs-list button[aria-selected="true"], 
+.tabs .tabs-list button[aria-selected="true"] p {
+  color: #fff;
+  border-bottom: 2px solid #fff;
+  font-weight: 600;
+  background: transparent;
+}
+
+/* Remove any block look from underline (force only thin line) */
+.tabs .tabs-list button[aria-selected="true"]::before,
+.tabs .tabs-list button[aria-selected="true"]::after {
+  display: none;
+}
+
+.tabs .tabs-list button[aria-selected="false"], 
+.tabs .tabs-list button[aria-selected="false"] p {
+  color: #888;
+  border-bottom: 2px solid transparent;
+  font-weight: 500;
+}
+
+/* --- Tabs Panel Layout --- */
+.tabs .tabs-panel {
+  display: none;
+  width: 100%;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tabs .tabs-panel[aria-hidden="false"] {
+  display: flex;
+}
+
+/* Center panel content & stack vertically */
+.tabs .tabs-panel > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* --- Headline --- */
+.tabs .tabs-panel h3 {
+  color: #fff;
+  font-family: var(--heading-font-family), 'Montserrat', Arial, sans-serif;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0 0 32px 0;
+  font-weight: 500;
+}
+
+/* --- Responsive image container --- */
+.tabs .tabs-panel > div > p {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* --- Image Styling --- */
+.tabs .tabs-panel picture,
+.tabs .tabs-panel img {
+  display: block;
+  margin: 0 auto;
+  border-radius: 24px;
+}
+
+.tabs .tabs-panel img {
+  width: 100%;
+  max-width: 980px;
+  height: auto;
+  border-radius: 24px;
+  object-fit: cover;
+  box-shadow: none;
+  background: #222;
+}
+
+/* --- Responsive adjustments --- */
+@media (max-width: 900px) {
+  .tabs .tabs-list {
+    gap: 28px;
+    margin-top: 18px;
+    margin-bottom: 10px;
+  }
+
+  .tabs .tabs-panel img {
+    max-width: 98vw;
+    border-radius: 16px;
+  }
+
+  .tabs .tabs-panel h3 {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .tabs .tabs-list {
+    gap: 12px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+  }
+
+  .tabs .tabs-panel img {
+    max-width: 100vw;
+    border-radius: 9px;
+  }
+
+  .tabs .tabs-panel h3 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+}
