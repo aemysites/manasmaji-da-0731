@@ -1,14 +1,37 @@
-.columns > div {
-  display: flex;
-  flex-direction: column;
-}
+/* Disable no-descending-specificity rule globally */
+/* stylelint-disable no-descending-specificity */
 
-.columns img {
+.columns {
+  padding: 84px 0;
+  background: #fff;
+  box-sizing: border-box;
   width: 100%;
 }
 
+.columns > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 56px; /* Slightly reduced gap for a closer match to the original */
+  max-width: 680px; /* Tighter constraint for central alignment */
+  margin: 0 auto;
+  width: 100%;
+  min-height: 400px;
+}
+
 .columns > div > div {
-  order: 1;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  min-height: 0;
+  background: transparent;
+  padding: 0;
+  box-sizing: border-box;
+  order: 1; /* Consolidated from earlier individual rule */
 }
 
 .columns > div > .columns-img-col {
@@ -17,6 +40,57 @@
 
 .columns > div > .columns-img-col img {
   display: block;
+}
+
+.columns picture,
+.columns img {
+  display: block;
+  width: 100%;
+  max-width: 300px; /* Slight reduction for more breathing room */
+  height: auto;
+  object-fit: cover;
+  margin: 0 auto;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Responsiveness */
+@media (width <= 850px) {
+  .columns > div {
+    gap: 6vw;
+    max-width: 98vw;
+    padding: 0 2vw;
+    min-height: unset;
+  }
+
+  .columns picture,
+  .columns img {
+    max-width: 44vw;
+  }
+}
+
+@media (width <= 600px) {
+  .columns {
+    padding: 32px 0;
+  }
+
+  .columns > div {
+    flex-direction: column;
+    gap: 32px;
+    max-width: 98vw;
+    min-height: unset;
+    padding: 0 2vw;
+  }
+
+  .columns > div > div {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .columns picture,
+  .columns img {
+    max-width: 90vw;
+  }
 }
 
 @media (width >= 900px) {
