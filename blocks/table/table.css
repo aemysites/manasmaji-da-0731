@@ -1,3 +1,6 @@
+/* Disable the `no-descending-specificity` rule globally */
+/* stylelint-disable no-descending-specificity */
+
 .table.block {
   width: 100%;
   overflow-x: auto;
@@ -50,18 +53,134 @@
   margin-top: 0.25em;
 }
 
-/* no header variant */
 .table.block.no-header table tbody tr {
   border-top: 1px solid;
 }
 
-/* striped variant */
 .table.block.striped tbody tr:nth-child(odd) {
   background-color: var(--overlay-background-color);
 }
 
-/* bordered variant */
-.table.block.bordered table th,
-.table.block.bordered table td {
-  border: 1px solid;
+.table.bordered {
+  background: #fff;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  width: 100vw;
+  max-width: 100vw;
+  left: 50%;
+  right: 50%;
+  position: relative;
+  transform: translateX(-50%);
+}
+
+/* Table settings */
+.table.bordered table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: unset;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Hide the table header */
+.table.bordered thead {
+  display: none;
+}
+
+/* Remove all th/td borders and default paddings */
+.table.bordered th,
+.table.bordered td {
+  border: none;
+  background: transparent;
+  padding: 0;
+  vertical-align: middle;
+}
+
+/* Each row as a grid for vertical centering and column sizing */
+.table.bordered tbody tr {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fff;
+  min-height: 36px;
+}
+
+/* Remove last divider */
+.table.bordered tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* Flex on cells for vertical alignment */
+.table.bordered td {
+  display: flex;
+  align-items: center;
+  min-height: 28px;
+  width: 100%;
+  background: #fff;
+}
+
+/* Question column (left) styling */
+.table.bordered td:first-child {
+  justify-content: flex-start;
+}
+
+.table.bordered td:first-child p {
+  font-family: Orbitron, Eurostile, Arial, sans-serif;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.035em;
+  font-size: 18px;
+  color: #757575;
+  margin: 10px 0 10px 10px;
+  line-height: 1.13;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Answer column (right) styling */
+.table.bordered td:last-child {
+  justify-content: flex-start;
+}
+
+.table.bordered td:last-child p {
+  font-family: Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #323232;
+  margin: 10px 0 10px 4px;
+  line-height: 1.4;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Remove paragraph margin collapse between multiple <p> in cells */
+.table.bordered td p + p {
+  margin-top: 0.5em;
+}
+
+/* Responsive: stack columns vertically on small screens */
+@media (width <= 700px) {
+  .table.bordered tbody tr {
+    grid-template-columns: 1fr;
+    min-height: unset;
+  }
+
+  .table.bordered td {
+    min-height: unset;
+  }
+
+  .table.bordered td:first-child p,
+  .table.bordered td:last-child p {
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 16px;
+  }
 }
