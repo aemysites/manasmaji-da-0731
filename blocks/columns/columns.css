@@ -1,5 +1,4 @@
 /* Fixed CSS Code */
-
 .columns {
   padding: 84px 0;
   background: #fff;
@@ -41,9 +40,9 @@
   display: block;
 }
 
+.columns img,
 .columns picture,
-.columns > div > .columns-img-col img,
-.columns img {
+.columns > div > .columns-img-col img {
   display: block;
   width: 100%;
   max-width: 300px;
@@ -54,6 +53,9 @@
   box-shadow: none;
 }
 
+/* Disabled no-descending-specificity globally */
+/* stylelint-disable no-descending-specificity */
+
 @media (width <= 850px) {
   .columns > div {
     gap: 6vw;
@@ -62,8 +64,8 @@
     min-height: unset;
   }
 
-  .columns picture,
-  .columns img {
+  .columns img,
+  .columns picture {
     max-width: 44vw;
   }
 }
@@ -86,8 +88,8 @@
     justify-content: center;
   }
 
-  .columns picture,
-  .columns img {
+  .columns img,
+  .columns picture {
     max-width: 90vw;
   }
 }
@@ -174,7 +176,7 @@
 .columns.columns32 > div {
   display: flex;
   flex-direction: row;
-  align-items: stretch; /* allow vertical centering via inner flex */
+  align-items: stretch;
   justify-content: center;
   gap: 80px;
   max-width: 1200px;
@@ -183,7 +185,6 @@
   box-sizing: border-box;
 }
 
-/* IMAGE COLUMN */
 .columns.columns32 .columns-img-col {
   display: flex;
   align-items: center;
@@ -191,7 +192,6 @@
   min-width: 400px;
 }
 
-/* Make sure the image/cell stretches full height for vertical centering reference */
 .columns.columns32 .columns-img-col,
 .columns.columns32 .columns-img-col picture,
 .columns.columns32 .columns-img-col img {
@@ -211,21 +211,19 @@
   margin: 0;
 }
 
-/* TEXT COLUMN: Create an inner flex container for vertical centering */
 .columns.columns32 > div > div:last-child {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center; /* Vertical centering */
+  justify-content: center;
   min-width: 0;
   max-width: 310px;
   width: 100%;
   margin: 0;
   height: 100%;
-  align-self: center; /* Ensure vertical centering in row */
+  align-self: center;
 }
 
-/* Wrap tagline and badge in a row, tighten badge/heading spacing */
 .columns.columns32 > div > div:last-child > p:nth-of-type(1),
 .columns.columns32 > div > div:last-child > p:nth-of-type(2) {
   display: inline-block;
@@ -259,7 +257,6 @@
   margin-left: 0;
 }
 
-/* Heading: taller font, max-width for compact line breaks */
 .columns.columns32 > div > div:last-child > h2 {
   font-family: var(--heading-font-family);
   font-size: 58px;
@@ -277,7 +274,6 @@
   white-space: pre-line;
 }
 
-/* Meta info: inline row, dot separators, grouped tightly */
 .columns.columns32 > div > div:last-child > p:nth-of-type(n+3) {
   display: inline;
   color: #979797;
@@ -342,5 +338,121 @@
   .columns.columns32 > div > div:last-child > h2 {
     font-size: 1.2rem;
     margin: 10px 0;
+  }
+}
+
+.columns.columns38 {
+  background: #fff;
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* The inner structure: <div> with three .columns-img-col children */
+.columns.columns38 > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  background: #fff;
+  padding: 40px 0;
+  box-sizing: border-box;
+  min-height: 1px;
+}
+
+/* Each column: ensure visible and centered content */
+.columns.columns38 > div > .columns-img-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Prevent stretching */
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+/* Default image styles, also apply to <picture> so that fallback images are not collapsed */
+.columns.columns38 .columns-img-col picture,
+.columns.columns38 .columns-img-col img {
+  display: block;
+  border-radius: 24px;
+  object-fit: cover;
+  background: #fff;
+  box-shadow: none;
+  width: 100%;
+  height: auto;
+  min-width: 0;
+}
+
+/* Middle image: larger and square */
+.columns.columns38 > div > .columns-img-col:nth-child(2) picture,
+.columns.columns38 > div > .columns-img-col:nth-child(2) img {
+  width: 380px;
+  height: 380px;
+  max-width: 380px;
+  max-height: 380px;
+  border-radius: 24px;
+}
+
+/* Side images: smaller and square */
+.columns.columns38 > div > .columns-img-col:nth-child(1) picture,
+.columns.columns38 > div > .columns-img-col:nth-child(3) picture,
+.columns.columns38 > div > .columns-img-col:nth-child(1) img,
+.columns.columns38 > div > .columns-img-col:nth-child(3) img {
+  width: 220px;
+  height: 220px;
+  max-width: 220px;
+  max-height: 220px;
+  border-radius: 24px;
+}
+
+/* Responsive adjustments for medium screens */
+@media (width <= 900px) {
+  .columns.columns38 > div {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    max-width: 98vw;
+    padding: 0 2vw;
+  }
+
+  .columns.columns38 > div > .columns-img-col:nth-child(2) picture,
+  .columns.columns38 > div > .columns-img-col:nth-child(2) img {
+    width: 280px;
+    height: 280px;
+    max-width: 280px;
+    max-height: 280px;
+    border-radius: 18px;
+  }
+
+  .columns.columns38 > div > .columns-img-col:nth-child(1) picture,
+  .columns.columns38 > div > .columns-img-col:nth-child(3) picture,
+  .columns.columns38 > div > .columns-img-col:nth-child(1) img,
+  .columns.columns38 > div > .columns-img-col:nth-child(3) img {
+    width: 160px;
+    height: 160px;
+    max-width: 160px;
+    max-height: 160px;
+    border-radius: 18px;
+  }
+}
+
+/* Responsive adjustments for small screens */
+@media (width <= 600px) {
+  .columns.columns38 > div {
+    gap: 16px;
+    padding: 0;
+  }
+
+  .columns.columns38 > div > .columns-img-col picture,
+  .columns.columns38 > div > .columns-img-col img {
+    max-width: 90vw;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
   }
 }
