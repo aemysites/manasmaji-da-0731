@@ -98,8 +98,6 @@
   justify-content: space-between;
   z-index: 1;
 }
-
-/* stylelint-disable-next-line no-descending-specificity */
 .carousel .carousel-navigation-buttons button {
   position: relative;
   width: 44px;
@@ -150,4 +148,217 @@
   .carousel .carousel-slide .carousel-slide-content[data-align='justify'] {
     --slide-content-width: auto;
   }
+}
+
+
+.carousel {
+  position: relative;
+  background: transparent;
+  overflow: visible;
+}
+
+/* --- MAIN IMAGE POLAROID --- */
+.carousel .carousel-slide .carousel-slide-image {
+  position: relative;
+  z-index: 3;
+  pointer-events: none;
+}
+.carousel .carousel-slide .carousel-slide-image picture {
+  display: block;
+  position: relative;
+  z-index: 7;
+  border-radius: 14px;
+  border: 6px solid #fff;
+  outline: 2.5px solid #232323;
+  outline-offset: -13px;
+  box-shadow:
+    0 8px 38px 0 rgba(0,0,0,0.12),
+    2px 2px 0 1.5px #dedede;
+  transform: rotate(-4.5deg) scale(1.01);
+  background: #fff;
+}
+
+/* --- COLLAGE LAYERS (PAPERS) -- add both behind and in front of the photo --- */
+.carousel .carousel-slide .carousel-slide-image::before,
+.carousel .carousel-slide .carousel-slide-image::after {
+  content: "";
+  display: block;
+  position: absolute;
+  pointer-events: none;
+  border-radius: 13px;
+}
+
+.carousel .carousel-slide .carousel-slide-image::before {
+  z-index: 2;
+  top: 13vw;
+  left: 29vw;
+  width: 35vw;
+  height: 7vw;
+  background: #fff;
+  border: 2.5px solid #dedede;
+  box-shadow: 0 3px 8px 0 rgba(0,0,0,0.13);
+  opacity: 0.93;
+  transform: rotate(7deg);
+}
+
+.carousel .carousel-slide .carousel-slide-image::after {
+  top: -4vw;
+  left: -5vw;
+  width: 24vw;
+  height: 7vw;
+  background: #f7f7f1;
+  border: 1.5px solid #e3e1dd;
+  box-shadow: 0 0px 12px 0 rgba(0,0,0,0.09);
+  opacity: 0.93;
+  transform: rotate(-11deg) skew(-10deg,2deg);
+  z-index: 1;
+}
+
+/* --- ADDITIONAL LAYERS FOR MORE DEPTH AND RANDOMNESS --- */
+.carousel .carousel-slide .carousel-slide-content::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: -6vw;
+  top: -5vw;
+  width: 11vw;
+  height: 4vw;
+  background: #fff;
+  border: 1.2px solid #ecebe8;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.14);
+  border-radius: 16px 18px 7px 14px;
+  opacity: 0.92;
+  transform: rotate(-12deg) scale(1.06);
+  z-index: 5;
+}
+
+.carousel .carousel-slide .carousel-slide-content::after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: -16vw;
+  bottom: -4vw;
+  width: 25vw;
+  height: 7vw;
+  background: #fffde8;
+  border: 1.8px solid #d7d5cc;
+  border-radius: 8px 22px 15px 9px;
+  opacity: 0.84;
+  box-shadow: 0 3px 16px 0 rgba(0,0,0,0.10);
+  transform: rotate(13deg) scale(0.95);
+  z-index: 4;
+}
+
+/* --- HAND-DRAWN/ORGANIC STYLE LINES (3 lines, varied position/color/thickness) --- */
+.carousel .carousel-slide::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 7vw;
+  top: 66%;
+  width: 62vw;
+  height: 2.6px;
+  background: linear-gradient(90deg, #232323 88%, transparent 100%);
+  border-radius: 4px;
+  opacity: 0.51;
+  transform: rotate(-4deg) skewX(-6deg);
+  z-index: 10;
+}
+.carousel .carousel-slide::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 11vw;
+  top: 6vw;
+  width: 21vw;
+  height: 3px;
+  background: linear-gradient(90deg, #bababa 65%, transparent 100%);
+  border-radius: 6px;
+  opacity: 0.34;
+  transform: rotate(8deg) skewY(11deg);
+  z-index: 4;
+}
+.carousel .carousel-slide .carousel-slide-content span.collage-line {
+  position: absolute;
+  left: 8vw;
+  top: 19vw;
+  width: 26vw;
+  height: 2px;
+  background: linear-gradient(90deg, #898989 60%, transparent 100%);
+  border-radius: 2px;
+  opacity: 0.25;
+  z-index: 13;
+  display: block;
+  transform: rotate(-14deg);
+  pointer-events: none;
+}
+
+/* --- HEADLINE TEXT: BLEND & SUBTLE ROTATION --- */
+.carousel .carousel-slide .carousel-slide-content {
+  background: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  position: absolute;
+  left: 10vw;
+  top: 10vw;
+  z-index: 20;
+  max-width: 48vw;
+  text-shadow:
+    0 3px 14px rgba(0, 0, 0, 0.44),
+    0 1px 1px rgba(0,0,0,0.09);
+  transform: rotate(-3.2deg);
+  opacity: 0.95;
+}
+
+.carousel .carousel-slide-content h2 {
+  font-size: clamp(1.43rem, 3.6vw, 2.4rem);
+  font-family: 'Syncopate', 'Syncopate Fallback', sans-serif;
+  font-weight: 400;
+  margin: 0 0 0.12em 0;
+  line-height: 1.06;
+  letter-spacing: 0.01em;
+  background: none;
+  color: #fff;
+  padding: 0;
+  border-radius: 0;
+  opacity: 0.91;
+  text-shadow:
+    0 2.5px 13px rgba(0, 0, 0, 0.29),
+    0 1px 2px rgba(0,0,0,0.09);
+  mix-blend-mode: lighten;
+}
+
+/* --- Responsive Tweaks --- */
+@media (max-width: 700px) {
+  .carousel .carousel-slide .carousel-slide-content {
+    left: 3vw;
+    top: 7vw;
+    max-width: 89vw;
+    font-size: clamp(1.1rem, 6vw, 1.7rem);
+  }
+  .carousel .carousel-slide-content h2 {
+    font-size: clamp(1.08rem, 7vw, 2rem);
+  }
+  .carousel .carousel-slide .carousel-slide-image::before {
+    top: 25vw;
+    left: 14vw;
+    width: 60vw;
+    height: 12vw;
+  }
+  .carousel .carousel-slide .carousel-slide-image::after {
+    width: 34vw;
+    height: 10vw;
+    top: 0vw;
+    left: -2vw;
+  }
+}
+
+/* --- Hide nav and indicators --- */
+.carousel .carousel-navigation-buttons {
+  display: none;
+}
+.carousel .carousel-slide-indicators {
+  display: none;
 }
