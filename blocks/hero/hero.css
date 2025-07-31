@@ -416,8 +416,6 @@
   overflow: hidden;
   display: block;
 }
-
-/* Collage container grid */
 .hero.hero20 > div:first-child {
   position: absolute;
   inset: 0;
@@ -427,8 +425,6 @@
   pointer-events: none;
   display: grid;
 }
-
-/* True grid for collage: place each <picture> in a unique cell */
 .hero.hero20 > div:first-child > div {
   display: grid;
   width: 100vw;
@@ -437,8 +433,6 @@
   grid-template-rows: repeat(3, 1fr);
   gap: 0;
 }
-
-/* Flatten <p> grid context so pictures inherit grid cells */
 .hero.hero20 > div:first-child > div > p {
   display: contents;
 }
@@ -457,8 +451,6 @@
   object-fit: cover;
   display: block;
 }
-
-/* Force 9 images into their cells for a 3x3 collage */
 .hero.hero20 > div:first-child > div > p > picture:nth-child(1) { grid-column: 1; grid-row: 1; }
 .hero.hero20 > div:first-child > div > p > picture:nth-child(2) { grid-column: 2; grid-row: 1; }
 .hero.hero20 > div:first-child > div > p > picture:nth-child(3) { grid-column: 3; grid-row: 1; }
@@ -468,8 +460,6 @@
 .hero.hero20 > div:first-child > div > p > picture:nth-child(7) { grid-column: 1; grid-row: 3; }
 .hero.hero20 > div:first-child > div > p > picture:nth-child(8) { grid-column: 2; grid-row: 3; }
 .hero.hero20 > div:first-child > div > p > picture:nth-child(9) { grid-column: 3; grid-row: 3; }
-
-/* Dark overlay for contrast */
 .hero.hero20 > div:first-child::after {
   position: absolute;
   left: 0; top: 0; right: 0; bottom: 0;
@@ -481,8 +471,6 @@
   display: block;
   content: "";
 }
-
-/* Centered content overlay */
 .hero.hero20 > div:nth-child(2) {
   position: relative;
   z-index: 3;
@@ -495,8 +483,6 @@
   padding: 0;
   background: none;
 }
-
-/* Content box styling & centering */
 .hero.hero20 > div:nth-child(2) > div {
   display: flex;
   flex-direction: column;
@@ -508,8 +494,6 @@
   margin: 0 auto;
   padding: 0 1.5rem;
 }
-
-/* Headline */
 .hero.hero20 h1 {
   font-family: var(--heading-font-family), 'Montserrat', Arial, sans-serif;
   font-size: clamp(2.2rem, 7vw, 5.2rem);
@@ -522,8 +506,6 @@
   max-width: 100%;
   text-align: center;
 }
-
-/* Subheadline */
 .hero.hero20 h1 + p {
   color: rgba(255,255,255,0.86);
   font-size: 1.19rem;
@@ -535,8 +517,6 @@
   margin-right: auto;
   text-align: center;
 }
-
-/* Button row styling (horizontal) */
 .hero.hero20 .button-container {
   display: inline-block;
   margin: 0 0.7rem 0 0;
@@ -574,8 +554,6 @@
   border-color: #fff;
   text-decoration: none;
 }
-
-/* Responsive tweaks */
 @media (max-width: 1020px) {
   .hero.hero20 > div:first-child > div {
     grid-template-columns: repeat(2, 1fr);
@@ -593,8 +571,6 @@
     max-width: 92vw;
   }
 }
-
-/* On small screens stack all pictures vertically */
 @media (max-width: 700px) {
   .hero.hero20 > div:first-child > div {
     grid-template-columns: 1fr;
@@ -608,4 +584,75 @@
   .hero.hero20 h1 {
     font-size: clamp(1.23rem, 7vw, 2.1rem);
   }
+}
+
+
+.hero.hero28 {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  min-height: 75vh;
+  background-image: url('./media_1afaa877f6f7b3c38a82dee0182ea1486c0f52a6f.avif?width=1216&format=avif&optimize=medium');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Hide the original image from layout, keep for accessibility */
+.hero.hero28 > div:first-child {
+  display: none;
+}
+
+/* Use grid for vertical centering, then add a slight top margin for optical correction */
+.hero.hero28 > div:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 4vh;
+  box-sizing: border-box;
+  padding-top: 0;
+  transform: none;
+}
+
+.hero.hero28 h1 {
+  color: #fff;
+  font-family: 'Futura', 'Eurostile', 'Syncopate', 'Syncopate Fallback', 'Arial', sans-serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 4.3vw, 4rem);
+  line-height: 1.15;
+  text-align: center;
+  letter-spacing: 0.03em;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.38);
+  margin: 0;
+  padding: 0 1vw;
+  max-width: 43vw;
+  box-sizing: border-box;
+  background: none;
+}
+
+@media (min-width: 900px) {
+  .hero.hero28 {
+    min-height: 83vh;
+  }
+  .hero.hero28 h1 {
+    font-size: clamp(2.2rem, 3.8vw, 4.7rem);
+    max-width: 36vw;
+    padding: 0;
+  }
+}
+
+/* Allow hero to occupy entire page width */
+.hero-container > .hero-wrapper {
+  max-width: unset;
+  padding: 0;
 }
