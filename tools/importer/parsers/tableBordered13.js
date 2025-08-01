@@ -1,27 +1,28 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // 1. Table header per block guidelines
-  const headerRow = ['Table (bordered)'];
-  // 2. Table columns per screenshot: Question | Answer
-  const tableHeader = ['Question', 'Answer'];
-  const rows = [];
-
-  // Each Q/A pair is in a .divider child, containing a .w-layout-grid with 2 div children: [0]=question, [1]=answer
-  const dividers = element.querySelectorAll(':scope > .divider');
-  dividers.forEach(divider => {
+  // Collect the FAQ rows from the HTML
+  const dividers = Array.from(element.querySelectorAll(':scope > .divider'));
+  const rows = dividers.map(divider => {
     const grid = divider.querySelector('.w-layout-grid');
-    if (!grid) return;
-    // Defensive: expect at least 2 children
-    const children = grid.children;
-    const question = children[0] || document.createElement('div');
-    const answer = children[1] || document.createElement('div');
-    rows.push([question, answer]);
-  });
+    if (!grid) return null;
+    const question = grid.children[0];
+    const answer = grid.children[1];
+    if (question && answer) {
+      return [question, answer];
+    }
+    return null;
+  }).filter(Boolean);
 
-  // Final table data structure
-  const tableData = [headerRow, tableHeader, ...rows];
+  // Determine correct column count (for this FAQ, always 2)
+  const colCount = 2;
 
-  // Create and replace in DOM
+  // Create the header row as a single cell spanning all columns
+  // The WebImporter.DOMUtils.createTable helper does not support colspans directly,
+  // but will render the first row as a single cell as in the example.
+  // All subsequent rows must have exactly colCount items.
+  const tableData = [ ['Table (bordered)'], ...rows ];
+
+  // Create and replace
   const table = WebImporter.DOMUtils.createTable(tableData, document);
   element.replaceWith(table);
 }

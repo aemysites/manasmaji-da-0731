@@ -1,50 +1,52 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Table header
-  const headerRow = ['Carousel'];
+  // We'll collect all slides, header row first
+  // According to the markdown example, the first row is a single cell with the block name, then each row has 2 cells
+  const cells = [['Carousel']];
 
-  // Find the card body that contains slide content
-  const cardBody = element.querySelector('.card-body');
-
-  // Extract image for the first cell (mandatory)
-  let img = null;
-  if (cardBody) {
-    img = cardBody.querySelector('img');
+  // Find all possible slides (generalized for multiple slides)
+  let slideNodes = [];
+  const directSlides = element.querySelectorAll(':scope > .ix-card-rotate-2');
+  if (directSlides.length > 0) {
+    slideNodes = Array.from(directSlides);
+  } else {
+    const cardSlides = element.querySelectorAll('.ix-card-rotate-2');
+    if (cardSlides.length > 0) {
+      slideNodes = Array.from(cardSlides);
+    } else {
+      slideNodes = [element];
+    }
   }
 
-  // Extract heading (if any)
-  let textCellContent = [];
-  if (cardBody) {
-    let heading = cardBody.querySelector('.h4-heading, h1, h2, h3, h4, h5, h6');
+  // For each slide, extract image and text
+  slideNodes.forEach((slideEl) => {
+    const cardBody = slideEl.querySelector('.card-body') || slideEl;
+    const img = cardBody.querySelector('img');
+    const heading = cardBody.querySelector('.h4-heading, h1, h2, h3, h4, h5, h6, .heading, .card-title, [class*=heading]');
+    let description = null;
+    // Find next sibling of heading that is not the image
     if (heading) {
-      // If it's not a heading element, wrap in <h2>
-      if (!/^H[1-6]$/i.test(heading.tagName)) {
-        const h2 = document.createElement('h2');
-        h2.innerHTML = heading.innerHTML;
-        textCellContent.push(h2);
-      } else {
-        textCellContent.push(heading);
+      let next = heading.nextElementSibling;
+      while (next && next.tagName === 'IMG') {
+        next = next.nextElementSibling;
+      }
+      if (next && next !== img) {
+        description = next;
       }
     }
-    // Extract additional text content (e.g., paragraphs not in heading)
-    // Only include <p> elements that are not descendants of a heading
-    const ps = Array.from(cardBody.querySelectorAll('p')).filter(p => {
-      let parent = p.parentElement;
-      while (parent && parent !== cardBody) {
-        if (/^H[1-6]$/i.test(parent.tagName)) return false;
-        parent = parent.parentElement;
-      }
-      return true;
-    });
-    textCellContent.push(...ps);
-  }
+    const textCell = [];
+    if (heading) textCell.push(heading);
+    if (description) textCell.push(description);
+    cells.push([
+      img,
+      textCell.length ? textCell : ''
+    ]);
+  });
 
-  if (textCellContent.length === 0) {
-    textCellContent = [''];
-  }
+  // Ensure all table rows after header are arrays of length 2
+  // (the header row is length 1, as in the markdown)
+  // This matches the markdown structure for WebImporter
 
-  const slideRow = [img, textCellContent];
-  const cells = [headerRow, slideRow];
   const table = WebImporter.DOMUtils.createTable(cells, document);
   element.replaceWith(table);
 }

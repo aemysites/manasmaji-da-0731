@@ -1,30 +1,19 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Get all direct child divs for columns
-  const columnDivs = Array.from(element.querySelectorAll(':scope > div'));
-
-  // For each column, use the contained img if present, else the div's content
-  const columns = columnDivs.map(div => {
-    const img = div.querySelector('img');
-    if (img) return img;
-    // fallback for non-image content:
-    const childNodes = Array.from(div.childNodes).filter(node => {
-      if (node.nodeType === Node.TEXT_NODE) {
-        return node.textContent.trim().length > 0;
-      }
-      return true;
-    });
-    return childNodes.length === 1 ? childNodes[0] : childNodes;
-  });
-
-  // The header row must be a single cell, matching the example structure
+  // Get all columns
+  const columns = Array.from(element.querySelectorAll(':scope > div'));
+  // Compose the header row: single cell, spanning all columns
   const headerRow = ['Columns block (columns4)'];
-  const contentRow = columns;
-  // Create the table with the correct block structure
-  const table = WebImporter.DOMUtils.createTable([
+  // Compose the content row: one cell per column, each containing the image (or whole content if more exists)
+  const contentRow = columns.map(col => {
+    // For resilience, use the column div itself (will often just be an <img> in this specific case)
+    return col;
+  });
+  // Construct the table with a single header cell row, and a content row of as many columns as needed
+  const cells = [
     headerRow,
     contentRow
-  ], document);
-
+  ];
+  const table = WebImporter.DOMUtils.createTable(cells, document);
   element.replaceWith(table);
 }

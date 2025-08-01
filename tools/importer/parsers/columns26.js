@@ -1,59 +1,54 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Find the main container (should be .container)
+  // Ensure we have the right container structure
   const container = element.querySelector(':scope > .container');
   if (!container) return;
 
-  // Find the main grid (should be .grid-layout that's a direct child of .container)
-  const grids = Array.from(container.querySelectorAll(':scope > .grid-layout'));
-  if (!grids.length) return;
-  const mainGrid = grids[0];
+  // The main two-column grid (columns)
+  const grid = container.querySelector('.w-layout-grid.grid-layout');
+  if (!grid) return;
 
-  // The mainGrid has: [heading <p>][paragraph <p>][nested grid]
-  // We want: left column = heading + avatar/name; right column = testimonial + svg logo
-  const children = Array.from(mainGrid.children);
-  if (children.length < 3) return; // Defensive: Not enough children
+  // Get all direct children of the main grid
+  const gridChildren = Array.from(grid.children);
+  if (gridChildren.length < 3) return;
 
-  // The pieces:
-  const heading = children[0];
-  const testimonial = children[1];
-  const nestedGrid = children[2];
+  // First column: left (heading, avatar block)
+  // Second column: right (testimonial text, logo)
+  //
+  // Structure of gridChildren:
+  // 0: <p> heading
+  // 1: <p> testimonial
+  // 2: inner grid (divider, avatar block, logo svg)
 
-  // From nestedGrid, get the avatar/name (flex-horizontal) and svg logo
-  let avatarBlock = null;
-  let logoBlock = null;
-  if (nestedGrid && nestedGrid.classList.contains('grid-layout')) {
-    const nestedChildren = Array.from(nestedGrid.children);
-    nestedChildren.forEach(child => {
-      if (child.classList.contains('flex-horizontal')) {
-        avatarBlock = child;
-      } else if (child.querySelector('svg')) {
-        logoBlock = child;
-      }
-    });
-  }
+  const heading = gridChildren[0];
+  const testimonial = gridChildren[1];
+  const innerGrid = gridChildren[2];
 
-  // Compose left and right columns as arrays of elements (order matters)
-  const leftCol = [];
-  if (heading) leftCol.push(heading);
-  if (avatarBlock) leftCol.push(avatarBlock);
-  const rightCol = [];
-  if (testimonial) rightCol.push(testimonial);
-  if (logoBlock) rightCol.push(logoBlock);
+  // innerGrid children:
+  // divider, flex-horizontal (avatar, name/title), utility-display-inline-block (contains svg)
+  const innerGridChildren = Array.from(innerGrid.children);
+  const avatarBlock = innerGridChildren.find(ch => ch.classList.contains('flex-horizontal'));
+  const logoBlock = innerGridChildren.find(ch => ch.querySelector('svg'));
 
-  // If a column is empty, provide an empty string as fallback for cell
-  const leftCell = leftCol.length ? leftCol : [''];
-  const rightCell = rightCol.length ? rightCol : [''];
+  // First column: heading + avatar block
+  const leftCol = document.createElement('div');
+  if (heading) leftCol.appendChild(heading);
+  if (avatarBlock) leftCol.appendChild(avatarBlock);
 
-  // Block table header: must match the example exactly
+  // Second column: testimonial + logo
+  const rightCol = document.createElement('div');
+  if (testimonial) rightCol.appendChild(testimonial);
+  if (logoBlock) rightCol.appendChild(logoBlock);
+
+  // Header row must match exactly
   const headerRow = ['Columns block (columns26)'];
-  // Now build the table data
-  const cells = [
-    headerRow,
-    [leftCell, rightCell]
-  ];
+  const contentRow = [leftCol, rightCol];
 
-  // Create the table and replace the element
-  const table = WebImporter.DOMUtils.createTable(cells, document);
-  element.replaceWith(table);
+  // Build and replace
+  const block = WebImporter.DOMUtils.createTable([
+    headerRow,
+    contentRow
+  ], document);
+
+  element.replaceWith(block);
 }

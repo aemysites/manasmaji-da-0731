@@ -1,26 +1,25 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Locate the grid layout container with columns
-  let gridContainer = null;
-  const children = Array.from(element.children);
-  for (let i = 0; i < children.length; i++) {
-    if (children[i].classList.contains('grid-layout')) {
-      gridContainer = children[i];
-      break;
-    }
-  }
-  if (!gridContainer) return;
-  // Get each immediate child (column) of the grid layout
-  const columns = Array.from(gridContainer.children);
-  // Defensive: if there are no columns, bail
+  // Find the inner grid that holds the columns
+  const grid = element.querySelector('.grid-layout');
+  if (!grid) return;
+  // Immediate children of the grid are the columns
+  const columns = Array.from(grid.children);
+  // If there are no columns, do not replace
   if (!columns.length) return;
-  // Compose the table: first row is header, second row is the actual columns content
+
+  // Block name header row matches exactly
   const headerRow = ['Columns block (columns31)'];
-  // Each column cell is the original element reference
+
+  // The content row: each cell is the full original column
   const contentRow = columns;
-  const tableArr = [headerRow, contentRow];
-  // Create the table block
-  const block = WebImporter.DOMUtils.createTable(tableArr, document);
-  // Replace the original element
-  element.replaceWith(block);
+
+  // Create the block table
+  const table = WebImporter.DOMUtils.createTable([
+    headerRow,
+    contentRow
+  ], document);
+
+  // Replace the original element with the table
+  element.replaceWith(table);
 }

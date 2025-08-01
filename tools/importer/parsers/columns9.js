@@ -1,19 +1,21 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Find the grid layout that holds the footer columns
-  const container = element.querySelector('.container');
-  if (!container) return;
-  const grid = container.querySelector('.w-layout-grid');
+  // Find the grid with direct column children
+  const grid = element.querySelector('.w-layout-grid.grid-layout');
   if (!grid) return;
 
-  // Each direct child of grid is a column; first is logo+socials, rest are nav columns
-  const gridChildren = Array.from(grid.children);
+  // Get all direct children of the grid as columns
+  const columns = Array.from(grid.children);
+  if (columns.length === 0) return;
 
-  // Create the block table structure: header with ONE column, then a row with all columns
+  // Table header: must be exactly one cell per requirements
   const headerRow = ['Columns block (columns9)'];
-  const columnsRow = gridChildren;
+  // Content row: one cell per column
+  const contentRow = columns;
 
-  const tableRows = [headerRow, columnsRow];
-  const block = WebImporter.DOMUtils.createTable(tableRows, document);
+  // Create the block table: first row = header (1 cell), next row = N cells for each column
+  const cells = [headerRow, contentRow];
+  
+  const block = WebImporter.DOMUtils.createTable(cells, document);
   element.replaceWith(block);
 }

@@ -1,34 +1,28 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Get the grid element containing all columns
+  // Find the grid layout containing the columns
   const grid = element.querySelector('.w-layout-grid');
   if (!grid) return;
-
-  // Get all direct child divs of the grid (each is a column)
+  // Each immediate child is a column wrapper
   const columnDivs = Array.from(grid.children);
-
-  // For each column, grab ALL direct children (not just img)
-  // This is more robust to text, images, links, etc in a column
-  const columnsRow = columnDivs.map(col => {
-    // Get all elements inside the column (usually a wrapper div or content)
-    // If there's only one child, use it; if more, bundle them as an array
-    const content = Array.from(col.childNodes).filter(
-      node => node.nodeType === Node.ELEMENT_NODE || (node.nodeType === Node.TEXT_NODE && node.textContent.trim())
-    );
-    if (content.length === 1) {
-      return content[0];
-    } else if (content.length > 1) {
-      return content;
+  // For each column, get its direct content (not just the image!)
+  // Robust: include the entire inner structure of each column
+  const columnContents = columnDivs.map(colDiv => {
+    // Find the innermost div that actually contains the content
+    // If there's only one child, return it, otherwise gather all
+    const innerDivs = Array.from(colDiv.children);
+    if (innerDivs.length === 1) {
+      return innerDivs[0];
     }
-    // If empty, return empty string
-    return '';
+    // If multiple, return as an array (WebImporter supports this)
+    return innerDivs;
   });
-
+  // Build the cells array
   const headerRow = ['Columns block (columns16)'];
-  const table = WebImporter.DOMUtils.createTable([
-    headerRow,
-    columnsRow
-  ], document);
-
-  element.replaceWith(table);
+  const contentRow = columnContents;
+  const cells = [headerRow, contentRow];
+  // Create the block table
+  const block = WebImporter.DOMUtils.createTable(cells, document);
+  // Replace the original element with the table
+  element.replaceWith(block);
 }

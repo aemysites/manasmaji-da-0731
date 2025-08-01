@@ -1,43 +1,54 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Find left (headline/title) and right (desc, author/button) columns
+  // Helper to get all direct children with given selector
+  function directChildren(parent, selector) {
+    return Array.from(parent.children).filter(child => child.matches(selector));
+  }
+
+  // Compose header row: always one column only
+  const headerRow = ['Columns block (columns11)'];
+
+  // Find the two grids: the main content grid and the image grid
   const container = element.querySelector(':scope > .container');
-  let grid = container ? container.querySelector('.w-layout-grid.grid-layout.tablet-1-column') : null;
-  if (!grid) grid = element.querySelector('.w-layout-grid.grid-layout.tablet-1-column');
-
-  let col1 = null;
-  let col2 = null;
-  if (grid) {
-    const gridColumns = grid.querySelectorAll(':scope > div');
-    col1 = gridColumns[0] || null;
-    col2 = gridColumns[1] || null;
+  let firstGrid = null;
+  if (container) {
+    firstGrid = container.querySelector('.w-layout-grid.grid-layout.tablet-1-column');
   }
 
-  // Images for the second row
-  let imagesGrid = element.querySelector('.w-layout-grid.grid-layout.mobile-portrait-1-column');
-  let img1 = null, img2 = null;
-  if (imagesGrid) {
-    const imgDivs = imagesGrid.querySelectorAll(':scope > .utility-aspect-1x1');
-    if (imgDivs[0]) img1 = imgDivs[0].querySelector('img');
-    if (imgDivs[1]) img2 = imgDivs[1].querySelector('img');
+  let leftColEls = [];
+  if (firstGrid) {
+    const firstGridCols = directChildren(firstGrid, 'div');
+    firstGridCols.forEach(col => leftColEls.push(col));
+  }
+  const leftColDiv = document.createElement('div');
+  leftColEls.forEach(el => leftColDiv.appendChild(el));
+
+  // Image grid
+  const imageGrid = element.querySelector('.w-layout-grid.mobile-portrait-1-column');
+  let imageCells = [];
+  if (imageGrid) {
+    const imgDivs = directChildren(imageGrid, '.utility-aspect-1x1');
+    imgDivs.forEach(div => {
+      const img = div.querySelector('img');
+      if (img) {
+        imageCells.push(div);
+      } else {
+        imageCells.push('');
+      }
+    });
   }
 
-  // Build cells: header row is always a single column
-  const cells = [];
-  // Header row: always one cell
-  cells.push(['Columns block (columns11)']);
-  // First content row (two columns)
-  cells.push([col1 || '', col2 || '']);
-  // Second row (two columns)
-  if (img1 || img2) {
-    cells.push([img1 || '', img2 || '']);
-  }
+  // The header must always be a single cell (one column),
+  // but subsequent rows can have two columns
+  const cells = [
+    headerRow,
+    [leftColDiv, imageCells[0] || ''],
+    [imageCells[1] || '', '']
+  ];
 
-  // Create the table
+  // Patch: force the header to be a single cell spanning all columns
+  // WebImporter.DOMUtils.createTable expects: if the first row has 1 cell, it will span all columns
+
   const table = WebImporter.DOMUtils.createTable(cells, document);
-  // Fix header cell to span all columns if necessary
-  if (table.rows.length > 1 && table.rows[0].cells.length === 1) {
-    table.rows[0].cells[0].setAttribute('colspan', String(table.rows[1].cells.length));
-  }
   element.replaceWith(table);
 }

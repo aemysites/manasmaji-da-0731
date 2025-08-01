@@ -1,31 +1,36 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Find the container div that holds the grid
-  const container = element.querySelector('.container');
-  if (!container) return;
-  // Find the grid-layout which contains the columns
-  const grid = container.querySelector('.grid-layout');
+  // Find the grid layout containing the columns
+  const grid = element.querySelector('.w-layout-grid');
   if (!grid) return;
 
-  // Get all immediate children of the grid, representing columns
-  const gridChildren = Array.from(grid.children);
+  // Get columns (should be two)
+  const columns = Array.from(grid.children);
+  if (columns.length < 2) return;
 
-  // The structure in this case is image in first, text/buttons in second
-  // Reference the actual elements directly for optimal block structure
+  // Left column (image)
+  const leftCell = columns[0];
+  // Right column (content: h1, p, buttons, etc)
+  const rightCol = columns[1];
+  // Gather all non-empty children of the right column
+  const rightCellContent = Array.from(rightCol.childNodes).filter(node => {
+    return !(node.nodeType === Node.TEXT_NODE && !node.textContent.trim());
+  });
 
-  // Construct header row as in example
-  const headerRow = ['Columns block (columns1)'];
-  // Second row: one cell for each column in the grid
-  const contentRow = gridChildren;
+  // Header row: single cell, but must span all columns (using colspan)
+  const headerRow = [document.createElement('th')];
+  headerRow[0].textContent = 'Columns block (columns1)';
+  // We'll set colspan on this header after table creation
 
-  // Build the table for the block
-  const cells = [
-    headerRow,
-    contentRow
-  ];
+  // Content row: each cell is a column
+  const contentRow = [leftCell, rightCellContent];
 
-  // Create the block table using the WebImporter helper
+  const cells = [headerRow, contentRow];
   const table = WebImporter.DOMUtils.createTable(cells, document);
-  // Replace the original element with the block table
+
+  // Fix: set colspan of header cell to number of columns
+  const th = table.querySelector('th');
+  if (th) th.setAttribute('colspan', String(contentRow.length));
+
   element.replaceWith(table);
 }

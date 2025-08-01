@@ -1,17 +1,18 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Get all direct children for columns
-  const columns = Array.from(element.querySelectorAll(':scope > .utility-aspect-1x1'));
-  // Extract images from each column
-  const images = columns.map(col => {
-    const img = col.querySelector('img');
-    return img || '';
-  });
-  // Header row should be a single cell, as in the example
+  // Build the header row: one column, matching exactly the example
   const headerRow = ['Columns block (columns17)'];
-  // Second row: all column content in their own cells
-  const contentRow = images;
-  const tableRows = [headerRow, contentRow];
-  const table = WebImporter.DOMUtils.createTable(tableRows, document);
-  element.replaceWith(table);
+
+  // Find all direct children divs (each is a column wrapper)
+  const columnDivs = element.querySelectorAll(':scope > div');
+
+  // Prepare the images as columns for the content row
+  const images = Array.from(columnDivs).map(div => div.querySelector('img') || '');
+
+  // Compose the table: header is a single cell, content row has as many columns as needed
+  const tableRows = [headerRow, images];
+
+  // Create and replace
+  const block = WebImporter.DOMUtils.createTable(tableRows, document);
+  element.replaceWith(block);
 }

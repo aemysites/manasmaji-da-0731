@@ -1,46 +1,53 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Find the grid layout that contains the columns
-  const grid = element.querySelector('.grid-layout');
+  // Find the grid containing the columns
+  const container = element.querySelector('.container');
+  if (!container) return;
+  const grid = container.querySelector('.grid-layout');
   if (!grid) return;
 
-  // There are three immediate children, representing the three columns
-  const mainColumns = Array.from(grid.children);
-  if (mainColumns.length !== 3) return; // Defensive: must be three columns
+  // Get all direct children of the grid
+  const gridChildren = Array.from(grid.children);
 
-  const [leftFeature, middleCards, rightLinks] = mainColumns;
+  // We expect:
+  // 0: big left card (main)
+  // 1: right top two cards (with images)
+  // 2: right bottom six cards (text-only, with dividers)
 
-  // 1. Left Feature: a single anchor with all content
-  // Use as-is
-  const leftCol = leftFeature;
-
-  // 2. Middle Cards: a flex div, each child is an anchor card
-  // Collect all direct <a> children and put them together in a fragment
-  let middleCol;
-  if (middleCards && middleCards.nodeType === 1) {
-    const anchors = Array.from(middleCards.querySelectorAll(':scope > a.utility-link-content-block'));
-    if (anchors.length) {
-      const frag = document.createDocumentFragment();
-      anchors.forEach(a => frag.appendChild(a));
-      middleCol = frag;
-    } else {
-      // If not found, reference the whole div (should not happen)
-      middleCol = middleCards;
+  // Left/Main card (first child is an <a> with .utility-link-content-block)
+  let mainCard = null;
+  for (const child of gridChildren) {
+    if (child.matches('a.utility-link-content-block')) {
+      mainCard = child;
+      break;
     }
-  } else {
-    middleCol = middleCards;
   }
+  if (!mainCard) return;
 
-  // 3. Right Links: a flex div, alternating a.utility-link-content-block and .divider
-  // Use the whole div so that all structure is preserved
-  const rightCol = rightLinks;
+  // The next two children are flex-horizontal wrappers for right-side columns
+  // (2nd and 3rd columns stacked vertically - but we want to merge their contents into one column)
+  const rightFlexBlocks = gridChildren.filter(c => c.classList.contains('flex-horizontal'));
 
-  // Compose the cells for the columns2 block
-  const header = ['Columns block (columns2)'];
-  const row = [leftCol, middleCol, rightCol];
-  const cells = [header, row];
+  // Gather all cards and dividers from both right flex blocks
+  const rightContentNodes = [];
+  rightFlexBlocks.forEach(flexBlock => {
+    Array.from(flexBlock.childNodes).forEach(node => {
+      // Ignore empty text nodes
+      if (node.nodeType === 3 && !node.textContent.trim()) return;
+      rightContentNodes.push(node);
+    });
+  });
 
-  // Create table and replace original element
-  const table = WebImporter.DOMUtils.createTable(cells, document);
+  // Create a DocumentFragment for the right column
+  const rightColFragment = document.createDocumentFragment();
+  rightContentNodes.forEach(node => rightColFragment.appendChild(node));
+
+  // Table: header row matches exactly as per requirements
+  const rows = [
+    ['Columns block (columns2)'],
+    [mainCard, rightColFragment]
+  ];
+
+  const table = WebImporter.DOMUtils.createTable(rows, document);
   element.replaceWith(table);
 }
