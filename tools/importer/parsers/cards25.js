@@ -1,37 +1,27 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // 1. Header row as in the example
-  const rows = [['Cards (cards25)']];
+  // Header is always as specified
+  const headerRow = ['Cards (cards25)'];
+  const rows = [];
+  // Get all direct children representing cards
+  const cardDivs = Array.from(element.querySelectorAll(':scope > div'));
+  cardDivs.forEach(div => {
+    // Find mandatory image in the card
+    const img = div.querySelector('img');
+    if (!img) return; // Only process cards with images
 
-  // 2. Get all direct children (cards) of the root element
-  const cards = Array.from(element.querySelectorAll(':scope > div'));
-
-  cards.forEach(card => {
-    // Find the main image in the card (always present)
-    const img = card.querySelector('img');
-    // Prepare image element reference for cell 1
-    let imageCell = img || '';
-
-    // Compose text container for cell 2
-    let textCell = '';
-    // Look for h3 and p within the card (they could be inside a nested container)
-    const h3 = card.querySelector('h3');
-    const p = card.querySelector('p');
-    if (h3 || p) {
-      const wrapper = document.createElement('div');
-      if (h3) wrapper.appendChild(h3);
-      if (p) wrapper.appendChild(p);
-      textCell = wrapper;
+    // Try to find the descriptive text content
+    let textContent = '';
+    // Prefer the .utility-padding-all-2rem wrapper (contains h3/p)
+    const textWrapper = div.querySelector('.utility-padding-all-2rem');
+    if (textWrapper) {
+      textContent = textWrapper;
     }
-    // If neither h3 nor p exists, leave the cell blank
-
-    rows.push([
-      imageCell,
-      textCell
-    ]);
+    rows.push([img, textContent]);
   });
 
-  // 3. Create the block table and replace
-  const table = WebImporter.DOMUtils.createTable(rows, document);
+  // Compose the table rows
+  const tableRows = [headerRow, ...rows];
+  const table = WebImporter.DOMUtils.createTable(tableRows, document);
   element.replaceWith(table);
 }

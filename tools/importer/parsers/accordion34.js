@@ -1,41 +1,40 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Find all direct accordion items (should be .accordion under the top container)
-  const accordionItems = Array.from(element.querySelectorAll(':scope > .accordion'));
-
-  // Prepare table rows, starting with the header
+  // Prepare the header as in the example: one row, one cell, with block name
   const rows = [['Accordion']];
 
-  accordionItems.forEach(item => {
-    // Title: the clickable area with the label
-    const toggle = item.querySelector(':scope > .w-dropdown-toggle');
-    let titleCell = null;
-    if (toggle) {
-      // Prefer the .paragraph-lg element inside the toggle
-      const paragraph = toggle.querySelector('.paragraph-lg');
-      titleCell = paragraph || toggle;
-    } else {
-      // Fallback: empty div to avoid null cell
-      titleCell = document.createElement('div');
-    }
+  // All accordion items are top-level children with class 'accordion'
+  const accordions = element.querySelectorAll(':scope > .accordion');
 
-    // Content: the expandable area
-    const content = item.querySelector(':scope > .accordion-content');
-    // The actual visible content is usually inside .w-richtext or .rich-text below content
+  accordions.forEach((accordion) => {
+    // Title: the .w-dropdown-toggle contains the title, usually inside .paragraph-lg
+    const toggle = accordion.querySelector('.w-dropdown-toggle');
+    let titleEl = null;
+    if (toggle) {
+      titleEl = toggle.querySelector('.paragraph-lg');
+      if (!titleEl) {
+        // Fallback: use the toggle itself if no .paragraph-lg
+        titleEl = toggle;
+      }
+    } else {
+      titleEl = document.createElement('div');
+    }
+    
+    // Content: the .accordion-content contains the content
+    const content = accordion.querySelector('.accordion-content');
     let contentCell = null;
     if (content) {
-      // Try to find the rich-text inside content
-      const rich = content.querySelector('.w-richtext, .rich-text');
-      contentCell = rich || content;
+      // Only the first child of .accordion-content contains the actual visible content
+      // Sometimes there may be wrappers, so use the whole .accordion-content
+      contentCell = content;
     } else {
-      // Fallback: empty div to avoid null cell
+      // Defensive: empty cell
       contentCell = document.createElement('div');
     }
 
-    rows.push([titleCell, contentCell]);
+    rows.push([titleEl, contentCell]);
   });
 
-  // Create the Accordion block table and replace the original element
   const table = WebImporter.DOMUtils.createTable(rows, document);
   element.replaceWith(table);
 }

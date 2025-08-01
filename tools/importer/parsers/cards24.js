@@ -1,34 +1,33 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Table header from the block spec
+  // Header row exactly as required
   const headerRow = ['Cards (cards24)'];
-
-  // Get all direct card <a> children
+  // Find all immediate card <a> children
   const cards = Array.from(element.querySelectorAll(':scope > a'));
-
-  // Build each card row: [image, content]
   const rows = cards.map(card => {
-    // Image: first img in card, if present
-    const img = card.querySelector('img');
-    
-    // Textual content: wrap tag/date and heading into a single div
-    const textFrag = document.createElement('div');
-    
-    // Tag and date (usually a flex row)
-    const metaRow = card.querySelector('.flex-horizontal');
-    if (metaRow) {
-      textFrag.appendChild(metaRow);
+    // Get image container (first div child, usually with image)
+    const imgDiv = card.querySelector(':scope > div');
+    // Use the div directly as the image cell (preserves padding/aspect wrappers for grid)
+    const imageCell = imgDiv;
+    // Meta (tag, date)
+    const metaDiv = card.querySelector('.flex-horizontal');
+    // Heading (title)
+    const heading = card.querySelector('h3, .h4-heading');
+    // Create text container
+    const textContainer = document.createElement('div');
+    // Add tag and date from metaDiv (if present)
+    if (metaDiv) {
+      Array.from(metaDiv.children).forEach(child => {
+        textContainer.appendChild(child);
+      });
     }
-    // Heading (h3)
-    const heading = card.querySelector('h3, h4, h5, h6');
+    // Add heading/title (if present)
     if (heading) {
-      textFrag.appendChild(heading);
+      textContainer.appendChild(heading);
     }
-    return [img, textFrag];
+    return [imageCell, textContainer];
   });
-
-  // Compose the final table data
-  const cells = [headerRow, ...rows];
-  const table = WebImporter.DOMUtils.createTable(cells, document);
+  const tableCells = [headerRow, ...rows];
+  const table = WebImporter.DOMUtils.createTable(tableCells, document);
   element.replaceWith(table);
 }

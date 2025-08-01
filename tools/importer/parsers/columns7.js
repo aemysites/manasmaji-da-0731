@@ -1,19 +1,23 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Get all direct children (columns)
-  const columns = Array.from(element.querySelectorAll(':scope > div'));
-  // Defensive: If no columns, do nothing
-  if (!columns.length) return;
-
-  // Header row must be a single cell, as per the example
+  // Header row with exactly one column as required
   const headerRow = ['Columns block (columns7)'];
-  // Content row, each column as a cell
-  const contentRow = columns;
 
-  // Compose cells array
-  const cells = [headerRow, contentRow];
-  
-  // Create and replace
+  // All direct child divs are columns
+  const columns = Array.from(element.querySelectorAll(':scope > div'));
+  // The second row should have one cell per column
+  const contentRow = columns.map(col => {
+    const img = col.querySelector('img');
+    if (img) return img;
+    // fallback if no img
+    return '';
+  });
+
+  const cells = [
+    headerRow,       // Single-cell header row
+    contentRow       // Content row with a cell for each column
+  ];
+
   const table = WebImporter.DOMUtils.createTable(cells, document);
   element.replaceWith(table);
 }

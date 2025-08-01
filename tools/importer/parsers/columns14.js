@@ -1,27 +1,24 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Find the grid layout inside the container
-  const grid = element.querySelector('.w-layout-grid');
-  let columns = [];
-  if (grid) {
-    // Get all direct children of the grid
-    columns = Array.from(grid.children);
-  } else {
-    // If the grid is not found, treat the entire element as a single column
-    columns = [element];
-  }
+  // Find the grid container
+  const grid = element.querySelector('.w-layout-grid, .grid-layout');
+  if (!grid) return;
+  const columns = Array.from(grid.children);
+  if (columns.length < 2) return;
 
-  // The header row must be a single column (one cell)
+  // Group h2 (heading) and content (text + button) to left and right columns as in the example
+  // LEFT: heading only (h2)
+  const leftCol = columns[0];
+  // RIGHT: everything else (for this HTML, just the div with paragraph and button)
+  const rightCol = columns[1];
+
+  // Table header row (EXACTLY as in the markdown/example)
   const headerRow = ['Columns block (columns14)'];
-  // The content row should have as many columns as there are direct children in the grid
-  const contentRow = columns;
+  const contentRow = [leftCol, rightCol];
 
-  // Create the table
   const table = WebImporter.DOMUtils.createTable([
     headerRow,
-    contentRow
+    contentRow,
   ], document);
-
-  // Replace the original element with the new table
   element.replaceWith(table);
 }

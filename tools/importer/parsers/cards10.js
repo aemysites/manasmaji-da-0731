@@ -1,45 +1,50 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Header row for the block
+  // The table header must match exactly
   const headerRow = ['Cards (cards10)'];
+  const rows = [headerRow];
 
-  // Find all card links directly under the main container
-  const cards = element.querySelectorAll(':scope > a.card-link');
+  // Select all card links that are direct children
+  const cardLinks = element.querySelectorAll(':scope > a.card-link');
 
-  // Build each card row for the block table
-  const rows = Array.from(cards).map(card => {
-    // IMAGE COLUMN
-    // Find the image inside the aspect ratio div
-    const imageDiv = card.querySelector('.utility-aspect-3x2');
-    const image = imageDiv ? imageDiv.querySelector('img') : null;
-    // TEXT COLUMN
-    const textDiv = card.querySelector('.utility-padding-all-1rem');
-    const cellParts = [];
-
-    // Tag (optional, above the heading)
-    const tag = textDiv && textDiv.querySelector('.tag-group .tag');
-    if (tag) {
-      // Place the original tag element inside a div for separation
-      const tagWrap = document.createElement('div');
-      tagWrap.append(tag);
-      cellParts.push(tagWrap);
+  cardLinks.forEach((card) => {
+    // Get the image: in .utility-aspect-3x2 img
+    let img = null;
+    const imageContainer = card.querySelector('.utility-aspect-3x2');
+    if (imageContainer) {
+      img = imageContainer.querySelector('img'); // will be null if no image
     }
-    // Heading (h3)
-    const heading = textDiv && textDiv.querySelector('h3');
-    if (heading) cellParts.push(heading);
-    // Description (p)
-    const desc = textDiv && textDiv.querySelector('p');
-    if (desc) cellParts.push(desc);
-    // Output the row: [image, [tag, heading, desc]]
-    return [image, cellParts];
+
+    // Get text content: in .utility-padding-all-1rem
+    const textContainer = card.querySelector('.utility-padding-all-1rem');
+    const textCellContents = [];
+    if (textContainer) {
+      // Tag(s) (optional)
+      const tagGroup = textContainer.querySelector('.tag-group');
+      if (tagGroup) {
+        // push each .tag in the group
+        tagGroup.querySelectorAll('.tag').forEach(tag => textCellContents.push(tag));
+      }
+      // Heading (optional)
+      const heading = textContainer.querySelector('.h4-heading');
+      if (heading) {
+        textCellContents.push(heading);
+      }
+      // Description/paragraph (optional)
+      const paragraph = textContainer.querySelector('.paragraph-sm');
+      if (paragraph) {
+        textCellContents.push(paragraph);
+      }
+    }
+
+    // Add this card's row: always 2 columns
+    rows.push([
+      img,
+      textCellContents.length === 1 ? textCellContents[0] : textCellContents
+    ]);
   });
 
-  // Build the block table
-  const table = WebImporter.DOMUtils.createTable([
-    headerRow,
-    ...rows
-  ], document);
-
-  // Replace the original element
+  // Create and replace
+  const table = WebImporter.DOMUtils.createTable(rows, document);
   element.replaceWith(table);
 }

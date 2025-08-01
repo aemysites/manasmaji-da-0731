@@ -1,42 +1,41 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Find the main grid containing the left column (text/buttons) and right column (images)
-  const container = element.querySelector('.container');
-  if (!container) return;
-  const grid = container.querySelector('.w-layout-grid');
+  // Find the main grid inside the section
+  const grid = element.querySelector('.w-layout-grid.grid-layout');
   if (!grid) return;
-  const cols = Array.from(grid.children);
-  if (cols.length < 2) return;
+  // Get all top-level grid columns
+  const gridChildren = grid.querySelectorAll(':scope > div');
+  if (gridChildren.length < 2) return;
 
-  // First column: title, subheading, buttons group
-  const col1 = cols[0];
-  // Reference the actual elements (not clones)
-  const col1Els = [];
-  Array.from(col1.children).forEach((child) => {
-    // Only add if it's not empty
-    if (child && (child.textContent.trim() !== '' || child.querySelector('img, a, button'))) {
-      col1Els.push(child);
-    }
-  });
+  // Left cell: heading, subheading, and buttons (reference actual elements)
+  const left = gridChildren[0];
+  const leftCellElements = [];
+  // Heading
+  const heading = left.querySelector('h1, h2, h3, h4, h5, h6');
+  if (heading) leftCellElements.push(heading);
+  // Subheading/paragraph
+  const subheading = left.querySelector('p');
+  if (subheading) leftCellElements.push(subheading);
+  // Button group
+  const buttonGroup = left.querySelector('.button-group');
+  if (buttonGroup) leftCellElements.push(buttonGroup);
 
-  // Second column: images
-  const col2 = cols[1];
-  // Find the (inner) grid containing the images
-  const imgGrid = col2.querySelector('.w-layout-grid');
-  let imgEls = [];
-  if (imgGrid) {
-    imgEls = Array.from(imgGrid.querySelectorAll('img'));
-  } else {
-    imgEls = Array.from(col2.querySelectorAll('img'));
+  // Right cell: grid of images (reference actual img elements)
+  const right = gridChildren[1];
+  const imagesGrid = right.querySelector('.w-layout-grid');
+  let images = [];
+  if (imagesGrid) {
+    images = Array.from(imagesGrid.querySelectorAll('img'));
   }
-  // Reference the actual <img> elements
 
-  // Table header as in the example
+  // Compose the block table
   const headerRow = ['Columns block (columns36)'];
-  // One row with the two columns
-  const row = [col1Els, imgEls];
-  const cells = [headerRow, row];
+  const contentRow = [leftCellElements, images];
 
-  const table = WebImporter.DOMUtils.createTable(cells, document);
+  const table = WebImporter.DOMUtils.createTable([
+    headerRow,
+    contentRow,
+  ], document);
+
   element.replaceWith(table);
 }

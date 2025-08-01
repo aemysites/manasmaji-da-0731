@@ -1,47 +1,58 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // 1. Get tab labels
-  const tabMenu = element.querySelector('.w-tab-menu');
-  let labels = [];
-  if (tabMenu) {
-    const tabLinks = tabMenu.querySelectorAll('a');
-    labels = Array.from(tabLinks).map(link => {
-      const labelDiv = link.querySelector('div');
-      return labelDiv ? labelDiv.textContent.trim() : link.textContent.trim();
-    });
+  // Find tab menu and tabs content by class
+  const children = Array.from(element.children);
+  let tabMenu = null;
+  let tabsContent = null;
+  for (const child of children) {
+    if (child.classList.contains('w-tab-menu')) {
+      tabMenu = child;
+    } else if (child.classList.contains('w-tab-content')) {
+      tabsContent = child;
+    }
   }
+  if (!tabMenu || !tabsContent) return;
 
-  // 2. Get tab contents
-  const tabContentContainer = element.querySelector('.w-tab-content');
-  let contents = [];
-  if (tabContentContainer) {
-    const tabPanes = tabContentContainer.children;
-    contents = Array.from(tabPanes).map(pane => {
-      const grid = pane.querySelector('.w-layout-grid');
-      return grid || pane;
-    });
-  }
+  // Get all tab links (labels)
+  const tabLinks = Array.from(tabMenu.querySelectorAll('a'));
+  const tabLabels = tabLinks.map(link => {
+    // Prefer a child div for label (as in provided HTML)
+    const labelDiv = link.querySelector('div');
+    if (labelDiv && labelDiv.textContent.trim()) {
+      return labelDiv.textContent.trim();
+    }
+    return link.textContent.trim();
+  });
 
-  // Defensive: Make sure labels and contents arrays match
-  const maxLen = Math.max(labels.length, contents.length);
-
-  // 3. Build the table rows
-  // Header row: one cell, exactly 'Tabs'
-  const cells = [ [ 'Tabs' ] ];
-  // Data rows: [label, content]
-  for (let i = 0; i < maxLen; i++) {
+  // Get tab panes (each represents a tab's content)
+  const tabPanes = Array.from(tabsContent.querySelectorAll(':scope > .w-tab-pane'));
+  
+  // Construct rows: header + each tab (label, content)
+  const cells = [];
+  // Header row: single cell only
+  cells.push(['Tabs']);
+  for (let i = 0; i < tabLabels.length; i++) {
+    const label = tabLabels[i];
+    const pane = tabPanes[i];
+    // Ensure pane exists
+    let tabContentElem = null;
+    if (pane) {
+      // If pane has exactly 1 div, use that as cell (matches example structure)
+      const mainDivs = Array.from(pane.children).filter(c => c.tagName === 'DIV');
+      if (mainDivs.length === 1) {
+        tabContentElem = mainDivs[0];
+      } else {
+        // Fallback: use pane itself
+        tabContentElem = pane;
+      }
+    }
     cells.push([
-      labels[i] !== undefined ? labels[i] : '',
-      contents[i] !== undefined ? contents[i] : document.createTextNode('')
+      label,
+      tabContentElem
     ]);
   }
 
-  // 4. Create the table and replace the original element
-  const table = WebImporter.DOMUtils.createTable(cells, document);
-  // Ensure the header row has only a single (colspan) th if needed
-  const headerRow = table.querySelector('tr:first-child');
-  if (headerRow && headerRow.children.length === 1 && (maxLen > 0 && cells[1].length > 1)) {
-    headerRow.children[0].setAttribute('colspan', cells[1].length);
-  }
-  element.replaceWith(table);
+  // Create table and replace element
+  const block = WebImporter.DOMUtils.createTable(cells, document);
+  element.replaceWith(block);
 }

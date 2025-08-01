@@ -1,19 +1,18 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Header row: single cell with block name
+  // Get all direct child divs (columns in source)
+  const columns = Array.from(element.querySelectorAll(':scope > div'));
+
+  // The header row must be a single cell
   const headerRow = ['Columns (columns38)'];
 
-  // Columns: each direct child div is a column
-  const columns = Array.from(element.querySelectorAll(':scope > div'));
-  // Content row: one cell for each column
-  const contentRow = columns;
+  // The content row must also be a single cell containing all columns side by side
+  const contentRow = [columns];
 
-  // Construct table with header row as single cell, content row as multiple columns
-  const cells = [
+  const table = WebImporter.DOMUtils.createTable([
     headerRow,
     contentRow
-  ];
-  
-  const table = WebImporter.DOMUtils.createTable(cells, document);
+  ], document);
+
   element.replaceWith(table);
 }

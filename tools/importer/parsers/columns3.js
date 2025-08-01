@@ -1,29 +1,34 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Find the grid that contains the columns
-  let grid = element.querySelector('.w-layout-grid, .grid-layout');
-  if (!grid) {
-    // Fallback: look for a div with multiple children
-    grid = Array.from(element.querySelectorAll('div')).find(div => div.children.length > 1);
-  }
+  // Find the columns container
+  const grid = element.querySelector('.grid-layout');
   if (!grid) return;
-
-  // Get all direct column DIVs
   const columns = Array.from(grid.children);
-  if (columns.length < 2) return;
+  if (!columns.length) return;
 
-  // For columns block (columns3), the header row is one cell, all content is in rows after
-  // Each row should have the same number of columns as the number of columns in the grid
-  // For this HTML, first column is title/text, second is buttons.
-  // But for row construction, treat each column as a cell in the same row
+  // Create a table manually so the header row can have colspan
+  const table = document.createElement('table');
+  const thead = document.createElement('thead');
+  const tbody = document.createElement('tbody');
 
-  // Build the header row (single-cell)
-  const headerRow = ['Columns block (columns3)'];
-  // Build subsequent row(s): each row is an array of column content
-  // Since this HTML is just a single row of columns, add just one content row
-  const contentRow = columns.map(col => col);
-  const cells = [headerRow, contentRow];
+  // Header row, with colspan to span all columns
+  const trHead = document.createElement('tr');
+  const th = document.createElement('th');
+  th.textContent = 'Columns block (columns3)';
+  if (columns.length > 1) th.setAttribute('colspan', columns.length);
+  trHead.appendChild(th);
+  thead.appendChild(trHead);
+  table.appendChild(thead);
 
-  const table = WebImporter.DOMUtils.createTable(cells, document);
+  // Content row
+  const trBody = document.createElement('tr');
+  columns.forEach(col => {
+    const td = document.createElement('td');
+    td.append(col);
+    trBody.appendChild(td);
+  });
+  tbody.appendChild(trBody);
+  table.appendChild(tbody);
+
   element.replaceWith(table);
 }

@@ -1,52 +1,32 @@
 /* global WebImporter */
 export default function parse(element, { document }) {
-  // Find the main grid layout for the columns
-  const container = element.querySelector('.container');
-  if (!container) return;
-  const grid = container.querySelector('.grid-layout');
+  // Find the main grid layout containing the columns
+  const grid = element.querySelector('.grid-layout');
   if (!grid) return;
+
+  // Get all direct children of the grid (expect two: left content div, right image)
   const gridChildren = Array.from(grid.children);
 
-  // Prepare variables for left (text) and right (image) columns
-  let leftCol = null;
-  let rightCol = null;
-
-  // Identify columns: one is text, one is image
-  gridChildren.forEach(child => {
-    if (!leftCol && (child.querySelector('h1') || child.querySelector('p') || child.querySelector('.button-group'))) {
-      leftCol = child;
-    }
-    if (!rightCol && (child.tagName === 'IMG' || child.querySelector('img'))) {
-      rightCol = (child.tagName === 'IMG') ? child : child.querySelector('img');
+  // We'll treat each grid child as a column, referencing their content directly
+  // For a DIV, include all of its content (including headings, paragraphs, buttons)
+  // For IMG, include as is
+  const columns = gridChildren.map(child => {
+    if (child.tagName === 'IMG') {
+      return child;
+    } else {
+      // For div or other element, use the element directly to keep all inner content/text/formatting
+      return child;
     }
   });
 
-  // Fallbacks if not both columns identified
-  if (!leftCol && gridChildren.length > 0) leftCol = gridChildren[0];
-  if (!rightCol && gridChildren.length > 1) rightCol = gridChildren[1];
+  // If the columns array is empty, abort
+  if (!columns.length) return;
 
-  // Ensure leftCol and rightCol are arrays for cell content
-  const leftColContent = [];
-  if (leftCol) {
-    // Extract all h1-h6, p, and .button-group elements, preserving order and structure
-    Array.from(leftCol.childNodes).forEach(node => {
-      if (node.nodeType === Node.ELEMENT_NODE && (node.matches('h1,h2,h3,h4,h5,h6,p,.button-group'))) {
-        leftColContent.push(node);
-      }
-    });
-    // If nothing found, push the whole leftCol
-    if (leftColContent.length === 0) leftColContent.push(leftCol);
-  }
-  const rightColContent = rightCol ? [rightCol] : [];
-
-  // Compose table as per the example
-  const headerRow = ['Columns block (columns15)'];
-  const contentRow = [leftColContent, rightColContent];
-
-  const table = WebImporter.DOMUtils.createTable([
-    headerRow,
-    contentRow
-  ], document);
-
+  // Build the block table with a SINGLE-CELL header row and one row for the columns
+  const cells = [
+    ['Columns block (columns15)'],
+    columns
+  ];
+  const table = WebImporter.DOMUtils.createTable(cells, document);
   element.replaceWith(table);
 }
